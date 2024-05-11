@@ -12,7 +12,7 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpPost("venda")]
-        public IActionResult VenderVeiculo(VendaDto vendaDto) {
+        public IActionResult VenderVeiculo([FromBody] VendaDto vendaDto) {
             try {
                 var venda = _vendaServico.VenderVeiculo(vendaDto);
                 return CreatedAtAction("ObterVenda", new { id = venda.Id }, venda);
@@ -24,7 +24,7 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpGet("venda/{id}")]
-        public IActionResult ObterVenda(int id) {
+        public IActionResult ObterVenda([FromRoute]int id) {
             var venda = _vendaServico.ObterVenda(id);
             if (venda == null) {
                 return NotFound();

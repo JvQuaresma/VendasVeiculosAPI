@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VeiculosAPI.DTOs;
+using VeiculosAPI.Models;
 using VeiculosAPI.Servicos;
 using VeiculosAPI.Servicos.Interfaces;
 
@@ -15,9 +16,9 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpPost("loja")]
-        public IActionResult AdicionarLoja(LojaDto lojaDto) {
+        public async Task<IActionResult> AdicionarLoja([FromBody]LojaRegisterDto lojaRegisterDto) {
             try {
-                var loja = _lojaServico.AdicionarLoja(lojaDto);
+                var loja = await _lojaServico.AdicionarLoja(lojaRegisterDto);
                 return CreatedAtAction("ObterLoja", new { id = loja.Id }, loja);
 
             } catch (Exception ex) {
@@ -27,8 +28,8 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpGet("loja/{id}")]
-        public IActionResult ObterLoja(int id) {
-            var loja = _lojaServico.ObterLoja(id);
+        public async Task<IActionResult> ObterLoja([FromRoute]int id) {
+            var loja = await _lojaServico.ObterLoja(id);
             if (loja == null) {
                 return NotFound();
             }
@@ -36,16 +37,16 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpGet("lojas")]
-        public IActionResult ObterTodasLojas() {
-            var lojas = _lojaServico.ObterTodasLojas();
+        public async Task<IActionResult> ObterTodasLojas() {
+            var lojas = await _lojaServico.ObterTodasLojas();
             return Ok(lojas);
         }
 
-        [HttpPut("atualizarLoja/{id}")]
-        public IActionResult AtualizarVeiculo(int id, LojaDto lojaDto) {
+        [HttpPut("atualizarLoja")]
+        public async Task<IActionResult> AtualizarVeiculo([FromBody]LojaDto lojaDto) {
             try {
-                _lojaServico.AtualizarLoja(id, lojaDto);
-                return NoContent();
+                var loja = await _lojaServico.AtualizarLoja(lojaDto);
+                return Ok(loja);
 
             } catch (Exception ex) {
 
@@ -54,10 +55,10 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpDelete("deletarLoja/{id}")]
-        public IActionResult DeletarLoja(int id) {
+        public async Task<IActionResult> DeletarLoja(int id) {
             try {
-                _lojaServico.DeletarLoja(id);
-                return NoContent();
+                var loja = await _lojaServico.DeletarLoja(id);
+                return Ok(loja);
 
             } catch (Exception ex) {
 

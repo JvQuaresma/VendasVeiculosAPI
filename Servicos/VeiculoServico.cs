@@ -14,20 +14,20 @@ namespace VeiculosAPI.Servicos {
 
         }
 
-        public Veiculo AdicionarVeiculo(VeiculoDto veiculoDto) {
+        public Veiculo AdicionarVeiculo(VeiculoRegisterDto veiculoRegisterDto) {
 
-            var loja = _context.Lojas.Find(veiculoDto.LojaId);
+            var loja = _context.Lojas.Find(veiculoRegisterDto.LojaId);
             if (loja == null) {
                 throw new Exception("Loja não encontrada");
             }
 
             var veiculo = new Veiculo { 
 
-                Modelo = veiculoDto.Modelo,
-                Marca = veiculoDto.Marca,
-                Ano = veiculoDto.Ano,
-                Preco = veiculoDto.Preco,
-                LojaId = veiculoDto.LojaId,
+                Modelo = veiculoRegisterDto.Modelo,
+                Marca = veiculoRegisterDto.Marca,
+                Ano = veiculoRegisterDto.Ano,
+                Preco = veiculoRegisterDto.Preco,
+                LojaId = veiculoRegisterDto.LojaId,
                 Loja = loja,
                 Vendido = false
             };
@@ -39,8 +39,8 @@ namespace VeiculosAPI.Servicos {
             
         }
 
-        public void AtualizarVeiculo(int id, VeiculoDto veiculoDto) {
-            var veiculoDb = _context.Veiculos.Find(id);
+        public void AtualizarVeiculo(VeiculoDto veiculoDto) {
+            var veiculoDb = _context.Veiculos.Find(veiculoDto.Id);
             if (veiculoDb != null) {
 
                 var loja = _context.Lojas.Find(veiculoDto.LojaId);
@@ -49,11 +49,12 @@ namespace VeiculosAPI.Servicos {
 
                 }
 
-                veiculoDb.Modelo = veiculoDto.Modelo;
-                veiculoDb.Marca = veiculoDto.Marca;
-                veiculoDb.Ano = veiculoDto.Ano;
-                veiculoDb.Preco = veiculoDto.Preco;
+                veiculoDb.Modelo = veiculoDto.Modelo == null ? veiculoDb.Modelo : veiculoDto.Modelo;
+                veiculoDb.Marca = veiculoDto.Marca == null ? veiculoDb.Marca : veiculoDto.Marca;
+                veiculoDb.Ano = veiculoDto.Ano == null ? veiculoDb.Ano : veiculoDto.Ano; 
+                veiculoDb.Preco = veiculoDto.Preco == null ? veiculoDb.Preco : veiculoDto.Preco;
                 veiculoDb.LojaId = veiculoDto.LojaId;
+                veiculoDb.Vendido = veiculoDto.Vendido == null ? veiculoDb.Vendido : veiculoDto.Vendido;
                 veiculoDb.Loja = loja;
 
                 _context.SaveChanges();

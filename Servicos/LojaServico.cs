@@ -15,24 +15,24 @@ namespace VeiculosAPI.Servicos {
 
         }
 
-        public Loja AdicionarLoja(LojaDto lojaDto) {
+        public async Task<Loja> AdicionarLoja(LojaRegisterDto lojaRegisterDto) {
 
             var loja = new Loja { 
 
-                Nome = lojaDto.Nome,
-                Localizacao = lojaDto.Localizacao,
+                Nome = lojaRegisterDto.Nome,
+                Localizacao = lojaRegisterDto.Localizacao,
 
             };
 
-            _context.Lojas.Add(loja);
-            _context.SaveChanges();
+           await _context.Lojas.AddAsync(loja);
+           await _context.SaveChangesAsync();
 
             return loja;
             
         }
 
-        public Loja ObterLoja(int id) {
-            var loja = _context.Lojas.Include(l => l.Veiculos).FirstOrDefault(l => l.Id == id);
+        public async Task<Loja> ObterLoja(int id) {
+            var loja = await _context.Lojas.Include(l => l.Veiculos).FirstOrDefaultAsync(l => l.Id == id);
             if (loja == null) {
                 throw new Exception("Loja não encontrada");
             }
@@ -40,36 +40,40 @@ namespace VeiculosAPI.Servicos {
             return loja;
         }
 
-        public IEnumerable<Loja> ObterTodasLojas() {
-            return  _context.Lojas.Include(v => v.Veiculos).ToList();
+        public async Task<IEnumerable<Loja>> ObterTodasLojas() {
+            return  await _context.Lojas.Include(v => v.Veiculos).ToListAsync();
         }
 
-        public void AtualizarLoja(int id, LojaDto lojaDto) {
-            var lojaExistente = _context.Lojas.Find(id);
+        public async Task<Loja> AtualizarLoja(LojaDto lojaDto) {
+            var lojaExistente = await _context.Lojas.FindAsync(lojaDto.Id);
 
             if (lojaExistente != null) {
-                lojaExistente.Nome = lojaDto.Nome;
-                lojaExistente.Localizacao = lojaDto.Localizacao;
-                _context.SaveChanges();
+                lojaExistente.Nome = lojaDto.Nome == null ? lojaExistente.Nome : lojaDto.Nome;
+                lojaExistente.Localizacao = lojaDto.Localizacao == null ? lojaExistente.Localizacao : lojaDto.Localizacao; 
+                await _context.SaveChangesAsync();
 
             } else {
 
                 throw new Exception("Loja não encontrada.");
             }
+
+            return lojaExistente;
         }
 
-        public void DeletarLoja(int id) {
-            var loja = _context.Lojas.Include(l => l.Veiculos).FirstOrDefault(l => l.Id == id);
+        public async Task<Loja> DeletarLoja(int id) {
+            var loja = await _context.Lojas.Include(l => l.Veiculos).FirstOrDefaultAsync(l => l.Id == id);
 
             if (loja != null) {
-                _context.Veiculos.RemoveRange(loja.Veiculos);
-                _context.Lojas.Remove(loja);
-                _context.SaveChanges();
+               _context.Veiculos.RemoveRange(loja.Veiculos);
+               _context.Lojas.Remove(loja);
+               await _context.SaveChangesAsync();
 
             } else {
 
                 throw new Exception("Loja não encontrada.");
             }
+
+            return loja;
         }
 
     }

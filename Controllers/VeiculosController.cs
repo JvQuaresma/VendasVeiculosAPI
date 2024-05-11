@@ -12,10 +12,10 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpPost("veiculo")]
-        public IActionResult AdicionarVeiculo(VeiculoDto veiculoDto) {
+        public IActionResult AdicionarVeiculo([FromBody]VeiculoRegisterDto veiculoRegisterDto) {
             try {
 
-                var veiculo = _veiculoServico.AdicionarVeiculo(veiculoDto);
+                var veiculo = _veiculoServico.AdicionarVeiculo(veiculoRegisterDto);
                 return CreatedAtAction("ObterVeiculo", new { id = veiculo.Id }, veiculo);
 
             } catch (Exception ex) {
@@ -40,10 +40,10 @@ namespace VeiculosAPI.Controllers {
             return Ok(veiculo);
         }
 
-        [HttpPut("atualizarVeiculo/{id}")]
-        public IActionResult AtualizarVeiculo(int id, VeiculoDto veiculoDto) {
+        [HttpPut("atualizarVeiculo")]
+        public IActionResult AtualizarVeiculo([FromBody] VeiculoDto veiculoDto) {
             try {
-                _veiculoServico.AtualizarVeiculo(id, veiculoDto);
+                _veiculoServico.AtualizarVeiculo(veiculoDto);
                 return NoContent();
 
             } catch (Exception ex) {
