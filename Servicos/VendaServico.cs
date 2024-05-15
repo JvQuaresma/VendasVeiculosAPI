@@ -15,18 +15,18 @@ namespace VeiculosAPI.Servicos {
 
         }
 
-        public IEnumerable<Venda> ObterTodasVendas(int page) {
+        public async Task<IEnumerable<Venda>> ObterTodasVendas(int page) {
 
             if (page < 1) page = 1;
             int limit = 10;
             int offset = (page - 1) * limit;
 
-            return _context.Vendas.Skip(offset).Take(limit).Include(l => l.Veiculo).ToList();
+            return await _context.Vendas.Skip(offset).Take(limit).Include(l => l.Veiculo).ToListAsync();
             
         }
 
-        public Venda ObterVenda(int id) {
-            var venda = _context.Vendas.Include(l => l.Veiculo).FirstOrDefault(l => l.Id == id);
+        public async Task<Venda> ObterVenda(int id) {
+            var venda = await _context.Vendas.Include(l => l.Veiculo).FirstOrDefaultAsync(l => l.Id == id);
             if (venda == null) {
                 throw new Exception("Venda não encontrada");
             }
@@ -35,8 +35,8 @@ namespace VeiculosAPI.Servicos {
             
         }
 
-        public Venda VenderVeiculo(VendaDto vendaDto) {
-            var veiculo = _context.Veiculos.Find(vendaDto.VeiculoId);
+        public async Task<Venda> VenderVeiculo(VendaDto vendaDto) {
+            var veiculo = await _context.Veiculos.FindAsync(vendaDto.VeiculoId);
             if (veiculo == null ) {
 
                 throw new Exception("O id do véiculo não pode ser vazio.");
@@ -53,11 +53,11 @@ namespace VeiculosAPI.Servicos {
                 DataVenda = vendaDto.DataVenda
             };
 
-            _context.Vendas.Add(venda);
-            _context.SaveChanges();
+            await _context.Vendas.AddAsync(venda);
+            await _context.SaveChangesAsync();
 
             veiculo.Vendido = true;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return venda;
 

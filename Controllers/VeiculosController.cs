@@ -12,10 +12,10 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpPost("veiculo")]
-        public IActionResult AdicionarVeiculo([FromBody]VeiculoRegisterDto veiculoRegisterDto) {
+        public async Task<IActionResult> AdicionarVeiculo([FromBody]VeiculoRegisterDto veiculoRegisterDto) {
             try {
 
-                var veiculo = _veiculoServico.AdicionarVeiculo(veiculoRegisterDto);
+                var veiculo = await _veiculoServico.AdicionarVeiculo(veiculoRegisterDto);
                 return CreatedAtAction("ObterVeiculo", new { id = veiculo.Id }, veiculo);
 
             } catch (Exception ex) {
@@ -26,14 +26,14 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpGet("veiculos")]
-        public IActionResult ObterTodosVeiculos(int page = 1) {
-            var veiculos = _veiculoServico.ObterTodosVeiculos(page);
+        public async Task<IActionResult> ObterTodosVeiculos(int page = 1) {
+            var veiculos = await _veiculoServico.ObterTodosVeiculos(page);
             return Ok(veiculos);
         }
 
         [HttpGet("veiculo/{id}")]
-        public IActionResult ObterVeiculo(int id) {
-            var veiculo = _veiculoServico.ObterVeiculo(id);
+        public async Task<IActionResult> ObterVeiculo(int id) {
+            var veiculo = await _veiculoServico.ObterVeiculo(id);
             if (veiculo == null) {
                 return NotFound();
             }
@@ -41,9 +41,9 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpPut("atualizarVeiculo")]
-        public IActionResult AtualizarVeiculo([FromBody] VeiculoDto veiculoDto) {
+        public async Task<IActionResult> AtualizarVeiculo([FromBody] VeiculoDto veiculoDto) {
             try {
-                _veiculoServico.AtualizarVeiculo(veiculoDto);
+                await _veiculoServico.AtualizarVeiculo(veiculoDto);
                 return NoContent();
 
             } catch (Exception ex) {
@@ -53,9 +53,9 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpDelete("deletarVeiculo/{id}")]
-        public IActionResult DeletarVeiculo(int id) {
+        public async Task<IActionResult> DeletarVeiculo(int id) {
             try {
-                _veiculoServico.DeletarVeiculo(id);
+                await _veiculoServico.DeletarVeiculo(id);
                 return NoContent();
 
             } catch (Exception ex) {

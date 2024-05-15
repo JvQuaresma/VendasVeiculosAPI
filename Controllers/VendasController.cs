@@ -12,9 +12,9 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpPost("venda")]
-        public IActionResult VenderVeiculo([FromBody] VendaDto vendaDto) {
+        public async Task<IActionResult> VenderVeiculo([FromBody] VendaDto vendaDto) {
             try {
-                var venda = _vendaServico.VenderVeiculo(vendaDto);
+                var venda = await _vendaServico.VenderVeiculo(vendaDto);
                 return CreatedAtAction("ObterVenda", new { id = venda.Id }, venda);
 
             } catch (Exception ex) {
@@ -24,8 +24,8 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpGet("venda/{id}")]
-        public IActionResult ObterVenda([FromRoute]int id) {
-            var venda = _vendaServico.ObterVenda(id);
+        public async Task<IActionResult> ObterVenda([FromRoute]int id) {
+            var venda = await _vendaServico.ObterVenda(id);
             if (venda == null) {
                 return NotFound();
 
@@ -35,8 +35,8 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpGet("vendas")]
-        public IActionResult ObterTodasVendas(int page = 1) {
-            var vendas = _vendaServico.ObterTodasVendas(page);
+        public async Task<IActionResult> ObterTodasVendas(int page = 1) {
+            var vendas = await _vendaServico.ObterTodasVendas(page);
 
             return Ok(vendas);
         }

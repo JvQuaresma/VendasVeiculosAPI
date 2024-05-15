@@ -4,9 +4,9 @@ using VeiculosAPI.Models;
 namespace VeiculosAPI.Servicos.Interfaces {
     public interface IVendaServico {
 
-        Venda VenderVeiculo(VendaDto vendaDto);
-        Venda ObterVenda(int id);
-        IEnumerable<Venda> ObterTodasVendas(int page);
+        public Task<Venda> VenderVeiculo(VendaDto vendaDto);
+        public Task<Venda> ObterVenda(int id);
+        public Task<IEnumerable<Venda>> ObterTodasVendas(int page);
 
     }
 }

@@ -4,11 +4,11 @@ using VeiculosAPI.Models;
 namespace VeiculosAPI.Servicos.Interfaces {
     public interface IVeiculoServico {
 
-        Veiculo AdicionarVeiculo(VeiculoRegisterDto veiculoRegisterDto);
-        Veiculo ObterVeiculo(int id);
-        IEnumerable<Veiculo> ObterTodosVeiculos(int page);
-        void AtualizarVeiculo(VeiculoDto veiculoDto);
-        void DeletarVeiculo(int id);
+        public Task<Veiculo> AdicionarVeiculo(VeiculoRegisterDto veiculoRegisterDto);
+        public Task<Veiculo> ObterVeiculo(int id);
+        public Task<IEnumerable<Veiculo>> ObterTodosVeiculos(int page);
+        public Task<Veiculo> AtualizarVeiculo(VeiculoDto veiculoDto);
+        public Task<Veiculo> DeletarVeiculo(int id);
 
     }
 }
