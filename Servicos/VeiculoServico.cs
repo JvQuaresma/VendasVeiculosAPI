@@ -3,22 +3,27 @@ using Microsoft.EntityFrameworkCore;
 using VeiculosAPI.Context;
 using VeiculosAPI.DTOs;
 using VeiculosAPI.Models;
+using VeiculosAPI.Repositories;
 using VeiculosAPI.Servicos.Interfaces;
 
 namespace VeiculosAPI.Servicos {
     public class VeiculoServico : IVeiculoServico {
 
+        private readonly IVeiculoRepository _repositorio;
+        private readonly ILojaServico _lojaServico;
+
         private readonly VendasVeiculoContext _context;
 
-        public VeiculoServico(VendasVeiculoContext context) {
+        public VeiculoServico(VendasVeiculoContext context, IVeiculoRepository repository, ILojaServico lojaServico) {
 
             _context = context;
-
+            _repositorio = repository;
+            _lojaServico = lojaServico;
         }
 
         public async Task<Veiculo> AdicionarVeiculo(VeiculoRegisterDto veiculoRegisterDto) {
 
-            var loja = await _context.Lojas.FindAsync(veiculoRegisterDto.LojaId);
+            var loja = await _lojaServico.ObterLoja(veiculoRegisterDto.LojaId);      //_context.Lojas.FindAsync(veiculoRegisterDto.LojaId);
             if (loja == null) {
                 throw new Exception("Loja não encontrada");
             }
@@ -34,50 +39,22 @@ namespace VeiculosAPI.Servicos {
                 Vendido = false
             };
 
-            await _context.Veiculos.AddAsync(veiculo);
-            await _context.SaveChangesAsync();
+            await _repositorio.AdicionarAsync(veiculo);
 
             return veiculo;
             
         }
 
         public async Task<Veiculo> AtualizarVeiculo(VeiculoDto veiculoDto) {
-            var veiculoDb = await _context.Veiculos.FindAsync(veiculoDto.Id);
-            if (veiculoDb == null) {
 
-                throw new Exception("Veículo não encontrado");
-
-            }
-
-            var loja = await _context.Lojas.FindAsync(veiculoDto.LojaId);
-            if (loja == null) {
-
-                throw new Exception("Loja não encontrada");
-
-            }
-
-            veiculoDb.Modelo = veiculoDto.Modelo == null ? veiculoDb.Modelo : veiculoDto.Modelo;
-            veiculoDb.Marca = veiculoDto.Marca == null ? veiculoDb.Marca : veiculoDto.Marca;
-            veiculoDb.Ano = veiculoDto.Ano == null ? veiculoDb.Ano : veiculoDto.Ano; 
-            veiculoDb.Preco = veiculoDto.Preco == null ? veiculoDb.Preco : veiculoDto.Preco;
-            veiculoDb.LojaId = veiculoDto.LojaId;
-            veiculoDb.Vendido = veiculoDto.Vendido == null ? veiculoDb.Vendido : veiculoDto.Vendido;
-            veiculoDb.Loja = loja;
-
-            await _context.SaveChangesAsync();
-
+            var veiculoDb = await _repositorio.AtualizarAsync(veiculoDto);           
             return veiculoDb;
            
         }
 
         public async Task<Veiculo> DeletarVeiculo(int id) {
-            var veiculo = await _context.Veiculos.FindAsync(id);
-            if (veiculo != null) {
-                throw new Exception("Veículo não encontrado");
-            }
-
-           _context.Veiculos.Remove(veiculo);
-           await _context.SaveChangesAsync();
+            
+            var veiculo = await _repositorio.DeletarAsync(id);
 
             return veiculo;
         }
@@ -88,17 +65,18 @@ namespace VeiculosAPI.Servicos {
             int limit = 10;
             int offset = (page - 1) * limit;
 
-            return await _context.Veiculos.Skip(offset).Take(limit).ToListAsync();
+            var resultado = await _repositorio.ObterTodosAsync(page, limit, offset);
+            return resultado;
 
         }
 
         public async Task<Veiculo> ObterVeiculo(int id) {
-            var veiculo = await _context.Veiculos.FindAsync(id);
+            var veiculo = await _repositorio.ObterPorIdAsync(id);
             if (veiculo == null) {
                 throw new Exception("Veículo não encontrado");
             }
 
-            return veiculo; ;
+            return veiculo; 
         }
     }
 }

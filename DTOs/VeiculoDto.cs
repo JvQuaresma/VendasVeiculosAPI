@@ -1,5 +1,5 @@
 ﻿namespace VeiculosAPI.DTOs {
-    public class VeiculoDto {
+    public record VeiculoDto {
 
         public int Id { get; set; }
         public string Modelo { get; set; }

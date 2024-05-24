@@ -8,11 +8,12 @@ namespace VeiculosAPI.Servicos {
     public class LojaServico : ILojaServico {
 
         private readonly VendasVeiculoContext _context;
+        private readonly ILojaRepository _repositorio;
 
-        public LojaServico(VendasVeiculoContext context) {
+        public LojaServico(VendasVeiculoContext context, ILojaRepository repositorio) {
 
             _context = context;
-
+            _repositorio = repositorio;
         }
 
         public async Task<Loja> AdicionarLoja(LojaRegisterDto lojaRegisterDto) {
@@ -24,55 +25,34 @@ namespace VeiculosAPI.Servicos {
 
             };
 
-           await _context.Lojas.AddAsync(loja);
-           await _context.SaveChangesAsync();
+            await _repositorio.AdicionarAsync(loja);
 
             return loja;
             
         }
 
         public async Task<Loja> ObterLoja(int id) {
-            var loja = await _context.Lojas.Include(l => l.Veiculos).FirstOrDefaultAsync(l => l.Id == id);
-            if (loja == null) {
-                throw new Exception("Loja não encontrada");
-            }
 
+            var loja = await _repositorio.ObterPorIdAsync(id);          
             return loja;
         }
 
         public async Task<IEnumerable<Loja>> ObterTodasLojas() {
-            return  await _context.Lojas.Include(v => v.Veiculos).ToListAsync();
+
+            var loja = await _repositorio.ObterTodasAsync();
+            return loja;
         }
 
         public async Task<Loja> AtualizarLoja(LojaDto lojaDto) {
-            var lojaExistente = await _context.Lojas.FindAsync(lojaDto.Id);
 
-            if (lojaExistente != null) {
-                lojaExistente.Nome = lojaDto.Nome == null ? lojaExistente.Nome : lojaDto.Nome;
-                lojaExistente.Localizacao = lojaDto.Localizacao == null ? lojaExistente.Localizacao : lojaDto.Localizacao; 
-                await _context.SaveChangesAsync();
-
-            } else {
-
-                throw new Exception("Loja não encontrada.");
-            }
-
+            var lojaExistente = await _repositorio.AtualizarAsync(lojaDto);
+           
             return lojaExistente;
         }
 
         public async Task<Loja> DeletarLoja(int id) {
-            var loja = await _context.Lojas.Include(l => l.Veiculos).FirstOrDefaultAsync(l => l.Id == id);
-
-            if (loja != null) {
-               _context.Veiculos.RemoveRange(loja.Veiculos);
-               _context.Lojas.Remove(loja);
-               await _context.SaveChangesAsync();
-
-            } else {
-
-                throw new Exception("Loja não encontrada.");
-            }
-
+            
+            var loja = await _repositorio.DeletarAsync(id);
             return loja;
         }
 

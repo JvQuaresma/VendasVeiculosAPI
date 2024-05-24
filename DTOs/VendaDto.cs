@@ -1,5 +1,5 @@
 ﻿namespace VeiculosAPI.DTOs {
-    public class VendaDto {
+    public record VendaDto {
 
         public int VeiculoId { get; set; }
         public decimal PrecoVendido { get; set; }

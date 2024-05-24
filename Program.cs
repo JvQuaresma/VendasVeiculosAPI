@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VeiculosAPI.Context;
+using VeiculosAPI.Repositories;
 using VeiculosAPI.Servicos;
 using VeiculosAPI.Servicos.Interfaces;
 
@@ -13,6 +14,9 @@ builder.Services.AddDbContext<VendasVeiculoContext>(options =>
 builder.Services.AddScoped<ILojaServico, LojaServico>();
 builder.Services.AddScoped<IVendaServico, VendaServico>();
 builder.Services.AddScoped<IVeiculoServico, VeiculoServico>();
+builder.Services.AddScoped<IVeiculoRepository, VeiculoRepositorio>();
+builder.Services.AddScoped<ILojaRepository, LojaRepositorio>();
+builder.Services.AddScoped<IVendaRepository, VendaRepositorio>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
