@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VeiculosAPI.Context;
 using VeiculosAPI.DTOs;
+using VeiculosAPI.Logs;
 using VeiculosAPI.Models;
 using VeiculosAPI.Servicos.Interfaces;
 
@@ -56,10 +57,15 @@ namespace VeiculosAPI.Repositories {
                 veiculo.Vendido = true;
                 await _context.SaveChangesAsync();
 
+                Log.LogToFile("Vender Veículo - Sucesso", "Venda Efetuada com Sucesso.");
+
                 return venda;
 
             } catch (Exception ex) {
+
+                Log.LogToFile("Vender Veículo - Erro", ex.Message);
                 throw new Exception("Erro ao tentar efetuar a venda." + ex.Message);
+
             }
         }
     }
