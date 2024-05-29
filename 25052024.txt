@@ -2,5 +2,23 @@ Log:
 25/05/2024
 Título da Mensagem: Vender Veículo - Sucesso
 Mensagem: Venda Efetuada com Sucesso.
---------------------------------------
+-------------------------------------------
+
+Log:
+25/05/2024
+Título da Mensagem: Vender Veículo - Sucesso
+Mensagem: Venda Efetuada com Sucesso.
+-------------------------------------------
+
+Log:
+25/05/2024
+Título da Mensagem: Vender Veículo - Sucesso
+Mensagem: Venda Efetuada com Sucesso.
+-------------------------------------------
+
+Log:
+25/05/2024 22:14
+Título da Mensagem: Vender Veículo - Sucesso
+Mensagem: Venda Efetuada com Sucesso.
+-------------------------------------------
 

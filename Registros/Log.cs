@@ -18,12 +18,12 @@
             }
 
             swLog.WriteLine("Log:");
-            swLog.WriteLine(DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString);
+            swLog.WriteLine(DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
 
             swLog.WriteLine($"Título da Mensagem: {title}");
             swLog.WriteLine($"Mensagem: {logMessage}");
 
-            swLog.WriteLine("-------------------------------------------");
+            swLog.WriteLine("--------------------------------------------");
             swLog.WriteLine("");
             swLog.Close(); 
 

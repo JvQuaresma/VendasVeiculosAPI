@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using VeiculosAPI.Context;
 using VeiculosAPI.DTOs;
@@ -11,33 +12,26 @@ namespace VeiculosAPI.Servicos {
 
         private readonly IVeiculoRepository _repositorio;
         private readonly ILojaServico _lojaServico;
+        private readonly IMapper _mapper;
 
         private readonly VendasVeiculoContext _context;
 
-        public VeiculoServico(VendasVeiculoContext context, IVeiculoRepository repository, ILojaServico lojaServico) {
+        public VeiculoServico(VendasVeiculoContext context, IVeiculoRepository repository, ILojaServico lojaServico, IMapper mapper) {
 
             _context = context;
             _repositorio = repository;
             _lojaServico = lojaServico;
+            _mapper = mapper;
         }
 
         public async Task<Veiculo> AdicionarVeiculo(VeiculoRegisterDto veiculoRegisterDto) {
 
-            var loja = await _lojaServico.ObterLoja(veiculoRegisterDto.LojaId);      //_context.Lojas.FindAsync(veiculoRegisterDto.LojaId);
+            var loja = await _lojaServico.ObterLoja(veiculoRegisterDto.LojaId);      
             if (loja == null) {
                 throw new Exception("Loja não encontrada");
             }
 
-            var veiculo = new Veiculo { 
-
-                Modelo = veiculoRegisterDto.Modelo,
-                Marca = veiculoRegisterDto.Marca,
-                Ano = veiculoRegisterDto.Ano,
-                Preco = veiculoRegisterDto.Preco,
-                LojaId = veiculoRegisterDto.LojaId,
-                Loja = loja,
-                Vendido = false
-            };
+            var veiculo = _mapper.Map<Veiculo>(veiculoRegisterDto);
 
             await _repositorio.AdicionarAsync(veiculo);
 

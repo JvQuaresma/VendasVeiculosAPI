@@ -38,6 +38,7 @@ namespace VeiculosAPI.Repositories {
 
                 }
 
+                
                 veiculoDb.Modelo = veiculoDto.Modelo == null ? veiculoDb.Modelo : veiculoDto.Modelo;
                 veiculoDb.Marca = veiculoDto.Marca == null ? veiculoDb.Marca : veiculoDto.Marca;
                 veiculoDb.Ano = veiculoDto.Ano == null ? veiculoDb.Ano : veiculoDto.Ano;
@@ -45,6 +46,8 @@ namespace VeiculosAPI.Repositories {
                 veiculoDb.LojaId = veiculoDto.LojaId;
                 veiculoDb.Vendido = veiculoDto.Vendido == null ? veiculoDb.Vendido : veiculoDto.Vendido;
                 veiculoDb.Loja = loja;
+            
+            
 
                 await _context.SaveChangesAsync();
 
