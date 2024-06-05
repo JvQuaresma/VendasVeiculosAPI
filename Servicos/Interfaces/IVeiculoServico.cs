@@ -1,14 +1,15 @@
-﻿using VeiculosAPI.DTOs;
+﻿using VeiculosAPI.DTOs.Veiculo;
 using VeiculosAPI.Models;
 
-namespace VeiculosAPI.Servicos.Interfaces {
+namespace VeiculosAPI.Servicos.Interfaces
+{
     public interface IVeiculoServico {
 
-        public Task<Veiculo> AdicionarVeiculo(VeiculoRegisterDto veiculoRegisterDto);
-        public Task<Veiculo> ObterVeiculo(int id);
-        public Task<IEnumerable<Veiculo>> ObterTodosVeiculos(int page);
-        public Task<Veiculo> AtualizarVeiculo(VeiculoDto veiculoDto);
-        public Task<Veiculo> DeletarVeiculo(int id);
+        public Task<VeiculoResponseDto> AdicionarVeiculo(VeiculoRegisterDto veiculoRegisterDto);
+        public Task<VeiculoResponseDto> ObterVeiculo(int id);
+        public Task<IEnumerable<VeiculoResponseDto>> ObterTodosVeiculos(int page);
+        public Task<VeiculoResponseDto> AtualizarVeiculo(VeiculoUpdateDto veiculoDto);
+        public Task<VeiculoResponseDto> DeletarVeiculo(int id);
 
     }
 }

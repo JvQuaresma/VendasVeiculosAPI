@@ -3,9 +3,10 @@ using VeiculosAPI.Context;
 using VeiculosAPI.DTOs;
 using VeiculosAPI.Logs;
 using VeiculosAPI.Models;
-using VeiculosAPI.Servicos.Interfaces;
+using VeiculosAPI.Repositories.Interfaces;
 
-namespace VeiculosAPI.Repositories {
+namespace VeiculosAPI.Repositories
+{
     public class VendaRepositorio : IVendaRepository {
 
         private readonly VendasVeiculoContext _context;
@@ -32,9 +33,9 @@ namespace VeiculosAPI.Repositories {
             return resultado;
         }
 
-        public async Task<Venda> VenderAsync(VendaDto vendaDto) {
+        public async Task<Venda> VenderAsync(Venda venda) {
             try {
-                var veiculo = await _context.Veiculos.FindAsync(vendaDto.VeiculoId);
+                var veiculo = await _context.Veiculos.FindAsync(venda.VeiculoId);
                 if (veiculo == null) {
 
                     throw new Exception("O id do véiculo não pode ser vazio.");
@@ -43,27 +44,20 @@ namespace VeiculosAPI.Repositories {
 
                     throw new Exception("Este veículo ja está vendido.");
                 }
-
-                var venda = new Venda {
-                    VeiculoId = vendaDto.VeiculoId,
-                    Veiculo = veiculo,
-                    PrecoVendido = vendaDto.PrecoVendido,
-                    DataVenda = vendaDto.DataVenda
-                };
-
+              
                 await _context.Vendas.AddAsync(venda);
                 await _context.SaveChangesAsync();
 
                 veiculo.Vendido = true;
                 await _context.SaveChangesAsync();
 
-                Log.LogToFile("Vender Veículo - Sucesso", "Venda Efetuada com Sucesso.");
+                Functions.LogToFile("Vender Veículo - Sucesso", "Venda Efetuada com Sucesso.");
 
                 return venda;
 
             } catch (Exception ex) {
 
-                Log.LogToFile("Vender Veículo - Erro", ex.Message);
+                Functions.LogToFile("Vender Veículo - Erro", ex.Message);
                 throw new Exception("Erro ao tentar efetuar a venda." + ex.Message);
 
             }

@@ -1,20 +1,27 @@
 ﻿using AutoMapper;
-using VeiculosAPI.DTOs;
+using VeiculosAPI.DTOs.Loja;
+using VeiculosAPI.DTOs.Veiculo;
+using VeiculosAPI.DTOs.Venda;
 using VeiculosAPI.Models;
 
-namespace VeiculosAPI.Mappings {
+namespace VeiculosAPI.Mappings
+{
     public class EntitiesToDtoMappingProfile : Profile {
 
         public EntitiesToDtoMappingProfile()
         {
 
             CreateMap<Loja, LojaRegisterDto>().ReverseMap();
-            CreateMap<Loja, LojaDto>().ReverseMap();
+            CreateMap<Loja, LojaUpdateDto>().ReverseMap();
+            CreateMap<Loja, LojaResponseDto>().ReverseMap();
 
             CreateMap<Veiculo, VeiculoRegisterDto>().ReverseMap();
-            CreateMap<Veiculo, VeiculoDto>().ReverseMap();
+            CreateMap<Veiculo, VeiculoUpdateDto>().ReverseMap();
+            CreateMap<Veiculo, VeiculoResponseDto>().ReverseMap();
 
-            CreateMap<Venda, VendaDto>().ReverseMap();
+            CreateMap<Venda, VendaUpdateDto>().ReverseMap();
+            CreateMap<Venda, VendaRegisterDto>().ReverseMap();
+            CreateMap<Venda, VendaResponseDto>().ReverseMap();
 
         }
 

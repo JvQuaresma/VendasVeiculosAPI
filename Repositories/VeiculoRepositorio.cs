@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using VeiculosAPI.Context;
 using VeiculosAPI.DTOs;
 using VeiculosAPI.Models;
-using VeiculosAPI.Servicos.Interfaces;
+using VeiculosAPI.Repositories.Interfaces;
 
-namespace VeiculosAPI.Repositories {
+namespace VeiculosAPI.Repositories
+{
     public class VeiculoRepositorio : IVeiculoRepository {
 
         private readonly VendasVeiculoContext _context;
@@ -22,16 +23,16 @@ namespace VeiculosAPI.Repositories {
 
         }
 
-        public async Task<Veiculo> AtualizarAsync(VeiculoDto veiculoDto) {
+        public async Task<Veiculo> AtualizarAsync(Veiculo veiculo) {
             try {
-                var veiculoDb = await _context.Veiculos.FindAsync(veiculoDto.Id);
+                var veiculoDb = await _context.Veiculos.FindAsync(veiculo.Id);
                 if (veiculoDb == null) {
 
                     throw new Exception("Veículo não encontrado");
 
                 }
 
-                var loja = await _context.Lojas.FindAsync(veiculoDto.LojaId);
+                var loja = await _context.Lojas.FindAsync(veiculo.LojaId);
                 if (loja == null) {
 
                     throw new Exception("Loja não encontrada");
@@ -39,16 +40,6 @@ namespace VeiculosAPI.Repositories {
                 }
 
                 
-                veiculoDb.Modelo = veiculoDto.Modelo == null ? veiculoDb.Modelo : veiculoDto.Modelo;
-                veiculoDb.Marca = veiculoDto.Marca == null ? veiculoDb.Marca : veiculoDto.Marca;
-                veiculoDb.Ano = veiculoDto.Ano == null ? veiculoDb.Ano : veiculoDto.Ano;
-                veiculoDb.Preco = veiculoDto.Preco == null ? veiculoDb.Preco : veiculoDto.Preco;
-                veiculoDb.LojaId = veiculoDto.LojaId;
-                veiculoDb.Vendido = veiculoDto.Vendido == null ? veiculoDb.Vendido : veiculoDto.Vendido;
-                veiculoDb.Loja = loja;
-            
-            
-
                 await _context.SaveChangesAsync();
 
                 return veiculoDb;

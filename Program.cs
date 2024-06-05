@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using VeiculosAPI.Context;
+using VeiculosAPI.Extensions;
 using VeiculosAPI.Mappings;
 using VeiculosAPI.Repositories;
+using VeiculosAPI.Repositories.Interfaces;
 using VeiculosAPI.Servicos;
 using VeiculosAPI.Servicos.Interfaces;
 
@@ -9,15 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<VendasVeiculoContext>(options =>  
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoPadrao")));
+builder.Services.AddSql(builder.Configuration)
+        .AddRepository()
+        .AddService();
 
-builder.Services.AddScoped<ILojaServico, LojaServico>();
-builder.Services.AddScoped<IVendaServico, VendaServico>();
-builder.Services.AddScoped<IVeiculoServico, VeiculoServico>();
-builder.Services.AddScoped<IVeiculoRepository, VeiculoRepositorio>();
-builder.Services.AddScoped<ILojaRepository, LojaRepositorio>();
-builder.Services.AddScoped<IVendaRepository, VendaRepositorio>();
 
 builder.Services.AddAutoMapper(typeof(EntitiesToDtoMappingProfile));
 

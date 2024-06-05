@@ -1,12 +1,13 @@
-﻿using VeiculosAPI.DTOs;
+﻿using VeiculosAPI.DTOs.Venda;
 using VeiculosAPI.Models;
 
-namespace VeiculosAPI.Servicos.Interfaces {
+namespace VeiculosAPI.Servicos.Interfaces
+{
     public interface IVendaServico {
 
-        public Task<Venda> VenderVeiculo(VendaDto vendaDto);
-        public Task<Venda> ObterVenda(int id);
-        public Task<IEnumerable<Venda>> ObterTodasVendas(int page);
+        public Task<VendaResponseDto> VenderVeiculo(VendaUpdateDto vendaDto);
+        public Task<VendaResponseDto> ObterVenda(int id);
+        public Task<IEnumerable<VendaResponseDto>> ObterTodasVendas(int page);
 
     }
 }

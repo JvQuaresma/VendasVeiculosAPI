@@ -2,9 +2,10 @@
 using VeiculosAPI.Context;
 using VeiculosAPI.DTOs;
 using VeiculosAPI.Models;
-using VeiculosAPI.Servicos.Interfaces;
+using VeiculosAPI.Repositories.Interfaces;
 
-namespace VeiculosAPI.Repositories {
+namespace VeiculosAPI.Repositories
+{
     public class LojaRepositorio : ILojaRepository {
 
         private readonly VendasVeiculoContext _context;
@@ -20,15 +21,13 @@ namespace VeiculosAPI.Repositories {
 
         }
 
-        public async Task<Loja> AtualizarAsync(LojaDto lojaDto) {
+        public async Task<Loja> AtualizarAsync(Loja loja) {
             try {
-                var lojaExistente = await _context.Lojas.FindAsync(lojaDto.Id);
+                var lojaExistente = await _context.Lojas.FindAsync(loja.Id);
 
                 if (lojaExistente == null)
                     throw new Exception("Loja não encontrada.");
 
-                lojaExistente.Nome = lojaDto.Nome == null ? lojaExistente.Nome : lojaDto.Nome;
-                lojaExistente.Localizacao = lojaDto.Localizacao == null ? lojaExistente.Localizacao : lojaDto.Localizacao;
                 await _context.SaveChangesAsync();
 
                 return lojaExistente;

@@ -1,19 +1,23 @@
 ﻿namespace VeiculosAPI.Logs {
-    public static class Log {
+    public static class Functions {
 
         public static void LogToFile(string title, string logMessage) {
 
-            string fileName = DateTime.Now.ToString("ddMMyyyy") + ".txt";
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var projectDirectory = Directory.GetParent(baseDirectory)?.Parent?.Parent?.Parent?.FullName;
+
+
+            string path = Path.Combine(projectDirectory,"SalesLog",DateTime.Now.ToString("ddMMyyyy") + ".txt");
 
             StreamWriter swLog;
 
-            if (File.Exists(fileName)) {
+            if (File.Exists(path)) {
 
-                swLog = File.AppendText(fileName);
+                swLog = File.AppendText(path);
 
             }else {
 
-                swLog = new StreamWriter(fileName);
+                swLog = new StreamWriter(path);
 
             }
 

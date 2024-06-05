@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VeiculosAPI.DTOs;
+using System.Linq.Expressions;
+using VeiculosAPI.DTOs.Loja;
+using VeiculosAPI.DTOs.Veiculo;
 using VeiculosAPI.Models;
 using VeiculosAPI.Servicos;
 using VeiculosAPI.Servicos.Interfaces;
+using VeiculosAPI.ViewModels;
 
-namespace VeiculosAPI.Controllers {
+namespace VeiculosAPI.Controllers
+{
     public class LojasController : ControllerBase {
 
         private readonly ILojaServico _lojaServico;
@@ -16,53 +20,62 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpPost("loja")]
-        public async Task<IActionResult> AdicionarLoja([FromBody]LojaRegisterDto lojaRegisterDto) {
-            try {
-                var loja = await _lojaServico.AdicionarLoja(lojaRegisterDto);
-                return CreatedAtAction("ObterLoja", new { id = loja.Id }, loja);
+        public async Task<ActionResult<ResponseViewModel<LojaResponseDto>>> AdicionarLoja([FromBody]LojaRegisterDto lojaRegisterDto) {
+            try { 
+                
+                return Ok(new ResponseViewModel(true,"Sucesso!",await _lojaServico.AdicionarLoja(lojaRegisterDto)));
 
             } catch (Exception ex) {
 
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseViewModel(false,ex.Message,null));
             }
         }
 
         [HttpGet("loja/{id}")]
-        public async Task<IActionResult> ObterLoja([FromRoute]int id) {
-            var loja = await _lojaServico.ObterLoja(id);
-            if (loja == null) {
-                return NotFound();
+        public async Task<ActionResult<ResponseViewModel<LojaResponseDto>>> ObterLoja([FromRoute]int id) {
+            try {
+                var loja = await _lojaServico.ObterLoja(id);
+                if (loja == null) {
+                    return NotFound();
+                }
+
+                return Ok(new ResponseViewModel(true,"Sucesso!", loja));
+
+            }catch(Exception ex) {
+                return BadRequest(new ResponseViewModel(false, ex.Message, null));
+
             }
-            return Ok(loja);
+            
         }
 
         [HttpGet("lojas")]
-        public async Task<IActionResult> ObterTodasLojas() {
-            var lojas = await _lojaServico.ObterTodasLojas();
-            return Ok(lojas);
+        public async Task<ActionResult<ResponseViewModel<List<LojaResponseDto>>>> ObterTodasLojas() {
+
+            return Ok(new ResponseViewModel(true, "Sucesso!", await _lojaServico.ObterTodasLojas()));
+
         }
 
         [HttpPut("atualizarLoja")]
-        public async Task<IActionResult> AtualizarVeiculo([FromBody]LojaDto lojaDto) {
+        public async Task<ActionResult<ResponseViewModel<LojaResponseDto>>> AtualizarVeiculo([FromBody]LojaUpdateDto lojaDto) {
             try {
-                var loja = await _lojaServico.AtualizarLoja(lojaDto);
-                return Ok(loja);
+                
+                return Ok(new ResponseViewModel(true, "Sucesso!", await _lojaServico.AtualizarLoja(lojaDto)));
 
             } catch (Exception ex) {
 
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseViewModel(false,ex.Message,null));
             }
         }
 
         [HttpDelete("deletarLoja/{id}")]
-        public async Task<IActionResult> DeletarLoja(int id) {
+        public async Task<ActionResult<ResponseViewModel<LojaResponseDto>>> DeletarLoja(int id) {
             try {
-                var loja = await _lojaServico.DeletarLoja(id);
-                return Ok(loja);
+                
+                return Ok(new ResponseViewModel(true,"Sucesso!", await _lojaServico.DeletarLoja(id)));
 
             } catch (Exception ex) {
 
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseViewModel(false,ex.Message,null));
             }
         }
 

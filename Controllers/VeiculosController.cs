@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VeiculosAPI.DTOs;
+using VeiculosAPI.DTOs.Veiculo;
 using VeiculosAPI.Servicos.Interfaces;
+using VeiculosAPI.ViewModels;
 
-namespace VeiculosAPI.Controllers {
+namespace VeiculosAPI.Controllers
+{
     public class VeiculosController : ControllerBase {
 
         private readonly IVeiculoServico _veiculoServico;
@@ -12,55 +14,69 @@ namespace VeiculosAPI.Controllers {
         }
 
         [HttpPost("veiculo")]
-        public async Task<IActionResult> AdicionarVeiculo([FromBody]VeiculoRegisterDto veiculoRegisterDto) {
+        public async Task<ActionResult<ResponseViewModel<VeiculoResponseDto>>> AdicionarVeiculo([FromBody]VeiculoRegisterDto veiculoRegisterDto) {
             try {
-
-                var veiculo = await _veiculoServico.AdicionarVeiculo(veiculoRegisterDto);
-                return CreatedAtAction("ObterVeiculo", new { id = veiculo.Id }, veiculo);
+            
+                return Ok(new ResponseViewModel(true,"Sucesso!", await _veiculoServico.AdicionarVeiculo(veiculoRegisterDto)));
 
             } catch (Exception ex) {
 
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseViewModel(false, ex.Message, null));
 
             }
         }
 
         [HttpGet("veiculos")]
-        public async Task<IActionResult> ObterTodosVeiculos(int page = 1) {
-            var veiculos = await _veiculoServico.ObterTodosVeiculos(page);
-            return Ok(veiculos);
+        public async Task<ActionResult<ResponseViewModel<List<VeiculoResponseDto>>>> ObterTodosVeiculos(int page = 1) {
+            try {
+               
+                return Ok(new ResponseViewModel(true,"Sucesso!", await _veiculoServico.ObterTodosVeiculos(page)));
+
+            }catch (Exception ex) {
+
+                return BadRequest(new ResponseViewModel(false, ex.Message, null));
+            }
+
         }
 
         [HttpGet("veiculo/{id}")]
-        public async Task<IActionResult> ObterVeiculo(int id) {
-            var veiculo = await _veiculoServico.ObterVeiculo(id);
-            if (veiculo == null) {
-                return NotFound();
+        public async Task<ActionResult<ResponseViewModel<VeiculoResponseDto>>> ObterVeiculo(int id) {
+            try {
+                var veiculo = await _veiculoServico.ObterVeiculo(id);
+                if (veiculo == null) {
+                    return NotFound();
+                }
+
+                return Ok(new ResponseViewModel(true,"Sucesso!",veiculo));
+
+            }catch(Exception ex) {
+
+                return BadRequest(new ResponseViewModel(false, ex.Message, null));
             }
-            return Ok(veiculo);
+
         }
 
         [HttpPut("atualizarVeiculo")]
-        public async Task<IActionResult> AtualizarVeiculo([FromBody] VeiculoDto veiculoDto) {
+        public async Task<ActionResult<ResponseViewModel<VeiculoResponseDto>>> AtualizarVeiculo([FromBody] VeiculoUpdateDto veiculoDto) {
             try {
-                await _veiculoServico.AtualizarVeiculo(veiculoDto);
-                return NoContent();
+                
+                return Ok(new ResponseViewModel(true,"Sucesso!", await _veiculoServico.AtualizarVeiculo(veiculoDto)));
 
             } catch (Exception ex) {
 
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseViewModel(false, ex.Message, null));
             }
         }
 
         [HttpDelete("deletarVeiculo/{id}")]
-        public async Task<IActionResult> DeletarVeiculo(int id) {
+        public async Task<ActionResult<ResponseViewModel<VeiculoResponseDto>>> DeletarVeiculo(int id) {
             try {
-                await _veiculoServico.DeletarVeiculo(id);
-                return NoContent();
+                
+                return Ok(new ResponseViewModel(true,"Sucesso!", await _veiculoServico.DeletarVeiculo(id)));
 
             } catch (Exception ex) {
 
-                return BadRequest(ex.Message);
+                return BadRequest(new ResponseViewModel(false, ex.Message, null));
             }
         }
 

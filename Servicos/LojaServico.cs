@@ -1,59 +1,58 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using VeiculosAPI.Context;
-using VeiculosAPI.DTOs;
+using VeiculosAPI.DTOs.Loja;
 using VeiculosAPI.Models;
+using VeiculosAPI.Repositories.Interfaces;
 using VeiculosAPI.Servicos.Interfaces;
 
-namespace VeiculosAPI.Servicos {
+namespace VeiculosAPI.Servicos
+{
     public class LojaServico : ILojaServico {
 
-        private readonly VendasVeiculoContext _context;
         private readonly ILojaRepository _repositorio;
+        private readonly IMapper _mapper;
 
-        public LojaServico(VendasVeiculoContext context, ILojaRepository repositorio) {
-
-            _context = context;
+        public LojaServico(ILojaRepository repositorio, IMapper mapper) {
+           
             _repositorio = repositorio;
+            _mapper = mapper;
         }
 
-        public async Task<Loja> AdicionarLoja(LojaRegisterDto lojaRegisterDto) {
-
-            var loja = new Loja { 
-
-                Nome = lojaRegisterDto.Nome,
-                Localizacao = lojaRegisterDto.Localizacao,
-
-            };
+        public async Task<LojaResponseDto> AdicionarLoja(LojaRegisterDto lojaRegisterDto) {
+       
+            var loja = _mapper.Map<Loja>(lojaRegisterDto);
 
             await _repositorio.AdicionarAsync(loja);
 
-            return loja;
+            return _mapper.Map<LojaResponseDto>(loja);
             
         }
 
-        public async Task<Loja> ObterLoja(int id) {
+        public async Task<LojaResponseDto> ObterLoja(int id) {
 
             var loja = await _repositorio.ObterPorIdAsync(id);          
-            return loja;
+            return _mapper.Map<LojaResponseDto>(loja);
         }
 
-        public async Task<IEnumerable<Loja>> ObterTodasLojas() {
+        public async Task<IEnumerable<LojaResponseDto>> ObterTodasLojas() {
 
             var loja = await _repositorio.ObterTodasAsync();
-            return loja;
+            return _mapper.Map<IEnumerable<LojaResponseDto>>(loja);
         }
 
-        public async Task<Loja> AtualizarLoja(LojaDto lojaDto) {
+        public async Task<LojaResponseDto> AtualizarLoja(LojaUpdateDto lojaDto) {
 
-            var lojaExistente = await _repositorio.AtualizarAsync(lojaDto);
+            var loja = _mapper.Map<Loja>(lojaDto);
+            var lojaExistente = await _repositorio.AtualizarAsync(loja);
            
-            return lojaExistente;
+            return _mapper.Map<LojaResponseDto>(lojaExistente);
         }
 
-        public async Task<Loja> DeletarLoja(int id) {
+        public async Task<LojaResponseDto> DeletarLoja(int id) {
             
             var loja = await _repositorio.DeletarAsync(id);
-            return loja;
+            return _mapper.Map<LojaResponseDto>(loja);
         }
 
     }
