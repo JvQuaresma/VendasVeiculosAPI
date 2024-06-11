@@ -1,19 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using VeiculosAPI.Context;
+using Veiculos.Service.Configurations.Mappings;
 using VeiculosAPI.Extensions;
-using VeiculosAPI.Mappings;
-using VeiculosAPI.Repositories;
-using VeiculosAPI.Repositories.Interfaces;
-using VeiculosAPI.Servicos;
-using VeiculosAPI.Servicos.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddSql(builder.Configuration)
-        .AddRepository()
-        .AddService();
+                .AddRepository()
+                .AddService();
 
 
 builder.Services.AddAutoMapper(typeof(EntitiesToDtoMappingProfile));

@@ -1,0 +1,6 @@
+Log:
+11/06/2024
+Título da Mensagem: Vender Veículo - Sucesso
+Mensagem: Venda Efetuada com Sucesso.
+--------------------------------------------
+

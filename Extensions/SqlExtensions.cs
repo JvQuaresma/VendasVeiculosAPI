@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using VeiculosAPI.Context;
+using Veiculos.Infra.Data;
 
 namespace VeiculosAPI.Extensions {
     static class SqlExtensions {
 
         public static IServiceCollection AddSql(this IServiceCollection services, IConfiguration configuration) {
 
-            services.AddDbContext<VendasVeiculoContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("ConexaoPadrao")));
+            services.AddDbContext<VehiclesContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConection")));
 
             return services;
 

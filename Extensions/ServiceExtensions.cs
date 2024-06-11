@@ -1,14 +1,15 @@
-﻿using VeiculosAPI.Servicos.Interfaces;
-using VeiculosAPI.Servicos;
+﻿
+using Veiculos.Domain.Interfaces.Services;
+using Veiculos.Service.Services;
 
 namespace VeiculosAPI.Extensions {
     static class ServiceExtensions {
 
         public static IServiceCollection AddService(this IServiceCollection services) {
 
-            services.AddScoped<ILojaServico, LojaServico>();
-            services.AddScoped<IVendaServico, VendaServico>();
-            services.AddScoped<IVeiculoServico, VeiculoServico>();
+            services.AddScoped<IStoreService, StoreService>();
+            services.AddScoped<ISaleService, SaleService>();
+            services.AddScoped<IVehicleService, VehicleService>();
 
             return services;
 
